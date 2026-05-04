@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Player</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h2 id="title"></h2>
+
+<iframe id="player" width="100%" height="400"></iframe>
+
+<script>
+const url = new URLSearchParams(window.location.search);
+document.getElementById("title").innerText = url.get("name");
+document.getElementById("player").src = url.get("link");
+</script>
+
+</body>
+</html>

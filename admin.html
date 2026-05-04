@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin</title>
+</head>
+
+<body>
+
+<h2>Admin Panel</h2>
+
+<input id="name" placeholder="Movie name">
+<input id="link" placeholder="Telegram link">
+<input id="cat" placeholder="Category">
+
+<button onclick="addMovie()">Add Movie</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { ref, push } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+const API="9c2740d400d5fcab8638d58c8ce9454b";
+
+async function getPoster(name){
+  let r = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API}&query=${name}`);
+  let d = await r.json();
+  return d.results[0] ? "https://image.tmdb.org/t/p/w500"+d.results[0].poster_path : "";
+}
+
+window.addMovie = async function(){
+  let poster = await getPoster(name.value);
+
+  push(ref(db,"movies"),{
+    name:name.value,
+    link:link.value,
+    cat:cat.value,
+    poster:poster
+  });
+
+  alert("Movie Added ✅");
+}
+</script>
+
+</body>
+</html>
