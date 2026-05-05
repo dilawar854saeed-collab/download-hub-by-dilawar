@@ -1,60 +1,55 @@
-import { db } from "./firebase.js";
-import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+const movieDiv = document.getElementById("movies");
+const trendingDiv = document.getElementById("trending");
 
-const moviesDiv = document.getElementById("movies");
-const trending = document.getElementById("trending");
+// LOAD MOVIES
+db.ref("movies").on("value", snap => {
+  movieDiv.innerHTML = "";
+  trendingDiv.innerHTML = "";
 
-let allMovies = [];
+  snap.forEach(child => {
+    const m = child.val();
 
-onValue(ref(db,"movies"), snap=>{
-  moviesDiv.innerHTML="";
-  trending.innerHTML="";
-  allMovies = [];
+    const card = `
+      <div class="movie-card">
+        <img src="${m.poster || 'https://via.placeholder.com/300'}">
+        <h3>${m.title || 'No Title'}</h3>
+        <button onclick="window.open('${m.link}')">Watch</button>
+      </div>
+    `;
 
-  snap.forEach(d=>{
-    let m = d.val();
-
-    let movie = {
-      name: m.name || "No Title",
-      link: m.link || "",
-      poster: m.poster || "https://via.placeholder.com/300x450"
-    };
-
-    allMovies.push(movie);
-
-    let card = createCard(movie);
-
-    moviesDiv.appendChild(card);
-
-    if(trending.children.length < 5){
-      trending.appendChild(createCard(movie));
-    }
+    movieDiv.innerHTML += card;
+    trendingDiv.innerHTML += card;
   });
 });
 
-function createCard(m){
-  let div = document.createElement("div");
-  div.className="card";
+// ADD MOVIE
+function addMovie() {
+  const title = document.getElementById("title").value;
+  const poster = document.getElementById("poster").value;
+  const link = document.getElementById("link").value;
 
-  div.innerHTML = `
-    <img src="${m.poster}">
-    <p>${m.name}</p>
-  `;
+  db.ref("movies").push({
+    title,
+    poster,
+    link
+  });
 
-  div.onclick = ()=>{
-    window.location.href = `player.html?name=${m.name}&link=${m.link}`;
-  };
-
-  return div;
+  alert("Added!");
 }
 
-/* SEARCH */
-document.getElementById("search").oninput = function(){
-  let v = this.value.toLowerCase();
+// ADMIN TOGGLE
+function toggleAdmin() {
+  const panel = document.getElementById("adminPanel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+}
 
-  moviesDiv.innerHTML="";
+// SEARCH
+document.getElementById("search").addEventListener("input", function() {
+  const val = this.value.toLowerCase();
+  const cards = document.querySelectorAll(".movie-card");
 
-  allMovies
-  .filter(m => m.name.toLowerCase().includes(v))
-  .forEach(m => moviesDiv.appendChild(createCard(m)));
-};
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(val) ? "block" : "none";
+  });
+});
