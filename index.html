@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Download Hub</title>
-<link rel="stylesheet" href="style.css">
+  <title>Download Hub</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>🚀 Download Hub</header>
+<h1>🚀 Download Hub</h1>
 
-<input id="search" placeholder="Search movies..." style="width:80%;margin:auto;display:block;padding:10px;border-radius:20px;">
+<input type="text" id="search" placeholder="Search movies...">
 
 <h2>🔥 Trending</h2>
-<div id="trending" class="row"></div>
+<div id="trending"></div>
 
 <h2>🎬 All Movies</h2>
-<div id="movies" class="row"></div>
+<div id="movies"></div>
 
-<script type="module" src="app.js"></script>
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <input id="title" placeholder="Movie Title"><br>
+  <input id="poster" placeholder="Poster URL"><br>
+  <input id="link" placeholder="Telegram Link"><br>
+  <button onclick="addMovie()">Add Movie</button>
+</div>
+
+<button onclick="toggleAdmin()">⚙ Admin</button>
+
 <script src="firebase.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
