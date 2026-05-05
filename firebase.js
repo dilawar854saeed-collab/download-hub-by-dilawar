@@ -6,9 +6,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyDPq7MhUJZsLXd-KseYkXY04aWVkoUtT9A",
   authDomain: "downlode-hub-by-dilawar.firebaseapp.com",
   databaseURL: "https://downlode-hub-by-dilawar-default-rtdb.firebaseio.com",
+ projectId: "dd699aac-8e1f-406d-ae5b-1fdb489d9732",
 };
 
-const app = initializeApp(firebaseConfig);
 
-export const db = getDatabase(app);
-export const auth = getAuth(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database()
